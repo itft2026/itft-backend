@@ -53,7 +53,7 @@ router.post("/create", [
             title, description, date, location, poster, registrationLink, status, type
         });
         await event.save();
-        const students = await Subscription.find(); // array of docs
+        const students = await Students.find(); // array of docs
          const studentEmails = students.map(s => s.email); // extract only emails
  
          await sendEventMail(studentEmails, event); // pass array of emails
@@ -105,6 +105,21 @@ router.put("/update/:id", [
     }
 })
 
+router.delete("/delete/all", async (req, res) => {
+   // console.log("DELETE /delete/all hit!");
+    try {
+        const teams = await Event.find();
+        if (teams) {
+            return res.status(400).json({ errors: [{ msg: "No Events Found" }] });
+        }
+        const result = await Event.deleteMany({});
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Delete error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 router.delete("/delete/:id", fetchUser, async (req, res) => {
     try {
         const event = await Event.findById(req.params.id);
@@ -119,19 +134,6 @@ router.delete("/delete/:id", fetchUser, async (req, res) => {
     }
 })
 
-router.delete("/deleteall/", async (req, res) => {
-   // console.log("DELETE /delete/all hit!");
-    try {
-        const teams = await Event.find();
-        if (teams) {
-            return res.status(400).json({ errors: [{ msg: "No Events Found" }] });
-        }
-        const result = await Event.deleteMany({});
-        res.status(200).json(result);
-    } catch (err) {
-        console.error("Delete error:", err);
-        res.status(500).json({ error: err.message });
-    }
-});
+
 
 module.exports = router;
