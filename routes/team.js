@@ -56,7 +56,7 @@ router.post("/add", [
             rollNumber, name, email, role, linkedin, image, gitHub, portfolio
         });
         await user.save();
-        return res.status(200).json({ message: "Team Member Created Successfully" });
+        return res.status(200).json({ user, message: "Team Member Created Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", error);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -93,7 +93,7 @@ router.put("/update/:id", [
         user.portfolio = portfolio;
         user.rollNumber = rollNumber;
         await user.save();
-        return res.status(200).json({ message: "Team Member Updated Successfully" });
+        return res.status(200).json({ user, message: "Team Member Updated Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", error);
         return res.status(500).json({ error: "Internal Server Error" });

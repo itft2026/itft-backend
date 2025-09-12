@@ -53,29 +53,18 @@ router.post("/create", [
             eventID, eventName, winner, runnerUp, eventsImages, resultSheet, date, noOfParticipants, video, venue
         });
         await result.save();
-        return res.status(200).json({ message: "Result Created Successfully" });
+        return res.status(200).json({ result, message: "Result Created Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", errors);
         return res.status(500).json({ error: "Internal Server Error" });
     }
-})
+});
 
-router.put("/update/:id", [
-    body("eventID").notEmpty().withMessage("Event ID is Required"),
-    body("eventName").notEmpty().withMessage("Event Name is Required"),
-    body("winner").notEmpty().withMessage("Winner is Required"),
-    body("runnerUp").notEmpty().withMessage("Runner Up is Required"),
-    body("eventsImages").notEmpty().withMessage("Events Images is Required"),
-    body("resultSheet").notEmpty().withMessage("Result Sheet is Required"), ,
-    body("date").notEmpty().withMessage("Date is Required"),
-    body("noOfParticipants").notEmpty().withMessage("Number of Participants is Required"),
-    body("video").notEmpty().withMessage("Video is Required"),
-    body("venue").notEmpty().withMessage("Venue is Required"),
-], fetchUser, async (req, res) => {
-    const errors = validationResult(req);
+router.put("/update/:id", fetchUser, async (req, res) => {
+    /*const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
-    }
+    }*/
 
     try {
         const { eventID, eventName, winner, runnerUp, eventsImages, resultSheet, date, noOfParticipants, video, venue } = req.body;
@@ -88,7 +77,7 @@ router.put("/update/:id", [
             eventID, eventName, winner, runnerUp, eventsImages, resultSheet, date, noOfParticipants, video, venue
         });
         await result.save();
-        return res.status(200).json({ message: "Result Updated Successfully" });
+        return res.status(200).json({ result, message: "Result Updated Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", error);
         return res.status(500).json({ error: "Internal Server Error" });

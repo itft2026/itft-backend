@@ -57,7 +57,7 @@ router.post("/add", [
             name, designation, department, experience, email, image, linkedIn, googleScholar, message
         });
         await professor.save();
-        return res.status(200).json({ message: "Professor Created Successfully" });
+        return res.status(200).json({ professor, message: "Professor Created Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", errors);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -96,7 +96,7 @@ router.put("/update/:id", [
         professor.googleScholar = googleScholar;
         professor.message = message;
         await professor.save();
-        return res.status(200).json({ message: "Professor Updated Successfully" });
+        return res.status(200).json({ professor, message: "Professor Updated Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", errors);
         return res.status(500).json({ error: "Internal Server Error" });

@@ -33,7 +33,6 @@ router.post("/create", [
     body("title").notEmpty().withMessage("Title is Required"),
     body("description").notEmpty().withMessage("Description is Required"),
     body("date").notEmpty().withMessage("Date is Required"),
-    body("expiryTime").notEmpty().withMessage("Expiry Time is Required"),
     body("isActive").notEmpty().withMessage("isActive is Required"),
 ], fetchUser, async (req, res) => {
     const errors = validationResult(req);
@@ -50,7 +49,7 @@ router.post("/create", [
         const students = await Subscription.find(); // array of docs
         const studentEmails = students.map(s => s.email); // extract only emails
         await sendEventMail(studentEmails, announcement);
-        return res.status(200).json({ message: "Announcement Created Successfully" });
+        return res.status(200).json({ announcement, message: "Announcement Created Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", errors);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -61,7 +60,6 @@ router.put("/update/:id", [
     body("title").notEmpty().withMessage("Title is Required"),
     body("description").notEmpty().withMessage("Description is Required"),
     body("date").notEmpty().withMessage("Date is Required"),
-    body("expiryTime").notEmpty().withMessage("Expiry Time is Required"),
     body("isActive").notEmpty().withMessage("isActive is Required"),
 ], fetchUser, async (req, res) => {
     const errors = validationResult(req);

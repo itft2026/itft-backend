@@ -53,7 +53,7 @@ router.post("/create", [
             title, description, date, location, poster, registrationLink, status, type
         });
         await event.save();
-        const students = await Students.find(); // array of docs
+        const students = await Student.find(); // array of docs
          const studentEmails = students.map(s => s.email); // extract only emails
  
          await sendEventMail(studentEmails, event); // pass array of emails

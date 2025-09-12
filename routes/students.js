@@ -42,7 +42,7 @@ router.post("/add", [
     body("github").notEmpty().withMessage("GitHub Profile is Required"),
     body("personalEmail").isEmail().withMessage("Enter a Valid Personal Email"),
     body("portfolio").optional().isURL().withMessage("Enter a Valid Portfolio URL")
-], fetchUser, async (req, res) => {
+],  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -58,7 +58,7 @@ router.post("/add", [
             regno, name, year, section, studentEmail, image, linkedin, github, personalEmail, portfolio
         });
         await Student.save();
-        return res.status(200).json({ message: "Student Created Successfully" });
+        return res.status(200).json({ Student, message: "Student Created Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", errors);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -99,7 +99,7 @@ router.put("/update/:id", [
         user.personalEmail = personalEmail;
         user.portfolio = portfolio;
         await user.save();
-        return res.status(200).json({ message: "Student Updated Successfully" });
+        return res.status(200).json({ user, message: "Student Updated Successfully" });
     } catch (errors) {
         console.log("------------------INTERNAL SERVER ERROR------------------", errors);
         return res.status(500).json({ error: "Internal Server Error" });

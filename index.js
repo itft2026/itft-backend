@@ -8,8 +8,7 @@ connectDB();
 
 app.use(cors());
 app.use(cors({
-  origin: "http://localhost:3000", // Replace with your frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: "http://localhost:3000",
   allowedHeaders: ["Content-Type", "authToken"]
 }));
 app.use(express.json());

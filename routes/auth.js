@@ -23,7 +23,7 @@ router.post("/login", [
         if (!user) {
             return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
         }
-        
+
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
@@ -37,18 +37,29 @@ router.post("/login", [
         }
 
         const authToken = jwt.sign(data, secret);
-        res.status(200).json({ authToken, message: "Logged In Successfully" });
+        res.status(200).json({ authToken, user, message: "Logged In Successfully" });
     } catch (error) {
         console.error("------------------INTERNAL SERVER ERROR------------------", error);
         return res.status(500).json(error, "Internal Server Error");
     }
 })
 
+router.get("/me", fetchUser, async (req, res) => {
+    try {
+        const user = await Admin.findById(req.user.id).select("-password"); // exclude password
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.json({ user });
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+
 router.post("/register", [
     body("name").notEmpty().withMessage("Enter a Valid Name"),
     body("email").isEmail().withMessage("Enter a Valid Email"),
-    body("password").isLength({ min: 5 }).withMessage("Password must be at least 5 characters long"),
-    body("role").notEmpty().withMessage("Role is required")
+    body("password").isLength({ min: 5 }).withMessage("Password must be at least 5 characters long")
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,8 +103,7 @@ router.post("/register", [
 router.put("/updateadmin/:id", [
     body("name").notEmpty().withMessage("Enter a Valid Name"),
     body("email").isEmail().withMessage("Enter a Valid Email"),
-    body("password").isLength({ min: 5 }).withMessage("Password must be at least 5 characters long"),
-    body("role").notEmpty().withMessage("Role is required")
+    body("password").isLength({ min: 5 }).withMessage("Password must be at least 5 characters long")
 ], fetchUser, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -166,7 +176,7 @@ router.delete("/deleteadmin/:id", fetchUser, async (req, res) => {
 router.delete("/deleteadmins", async (req, res) => {
     try {
         const admins = await Admin.find();
-        if(admins) {
+        if (admins) {
             res.status(200).json({ msg: "No admins exists" });
         }
         await Admin.deleteMany({});

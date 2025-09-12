@@ -13,10 +13,6 @@ const announcements = mongoose.Schema({
         type: Date,
         required: true
     },
-    expiryTime: {
-        type: Date,
-        required: true
-    },
     isActive: {
         type: Boolean,
         default: true
