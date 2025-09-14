@@ -54,11 +54,11 @@ router.post("/create", [
         });
         await event.save();
         const students = await Student.find(); // array of docs
-         const studentEmails = students.map(s => s.email); // extract only emails
- 
+         const studentEmails = students.map(s => s.studentEmail); // extract only emails
+        
          await sendEventMail(studentEmails, event); // pass array of emails
 
-        return res.status(200).json({ message: "Event Created Successfully" });
+        return res.status(200).json({ event,  message: "Event Created Successfully" });
     } catch (error) {
         console.error("------------------INTERNAL SERVER ERROR------------------", error);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -95,10 +95,10 @@ router.put("/update/:id", [
         event.type = type;
         await event.save();
         const students = await Student.find(); // array of docs
-        const studentEmails = students.map(s => s.email); // extract only emails
+        const studentEmails = students.map(s => s.studentEmail); // extract only emails
 
         await sendEventMail(studentEmails, event); // pass array of emails
-        return res.status(200).json({ message: "Event Updated Successfully" });
+        return res.status(200).json({  event, message: "Event Updated Successfully" });
     } catch (error) {
         console.log("------------------INTERNAL SERVER ERROR------------------", error);
         return res.status(500).json({ error: "Internal Server Error" });

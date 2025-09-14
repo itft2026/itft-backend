@@ -47,7 +47,7 @@ router.post("/create", [
         });
         await announcement.save();
         const students = await Subscription.find(); // array of docs
-        const studentEmails = students.map(s => s.email); // extract only emails
+        const studentEmails = students.map(s => s.studentEmail); // extract only emails
         await sendEventMail(studentEmails, announcement);
         return res.status(200).json({ announcement, message: "Announcement Created Successfully" });
     } catch (errors) {
@@ -80,7 +80,7 @@ router.put("/update/:id", [
         announcement.isActive = isActive;
         await announcement.save();
         const students = await Subscription.find(); // array of docs
-        const studentEmails = students.map(s => s.email); // extract only emails
+        const studentEmails = students.map(s => s.studentEmail); // extract only emails
         await sendEventMail(studentEmails, announcement);
         return res.status(200).json({ message: "Announcement Updated Successfully" });
     } catch (errors) {
