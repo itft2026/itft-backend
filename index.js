@@ -6,9 +6,21 @@ const cors = require("cors");
 require("dotenv").config();
 connectDB();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://itftsac.vercel.app",
+];
+
 app.use(cors());
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow requests without origin (mobile apps, curl)
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
   allowedHeaders: ["Content-Type", "authToken"]
 }));
 app.use(express.json());
